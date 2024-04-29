@@ -9,10 +9,10 @@ type ThemeProp = {
 enum themePalette {
   Teal = "#009688",
   White = "#FFF",
-  Black = "#000",
   BattleshipGray = "#827F74",
   LightGray = "#f0f2f5",
-  OffWhite = "#FDFDFD",
+  CoolGray = "#e4e6eb",
+  CoolDarkGray = "#D8DADF",
 }
 
 const theme = createTheme({
@@ -24,17 +24,17 @@ const theme = createTheme({
     secondary: {
       main: themePalette.BattleshipGray,
     },
-    white: {
-      main: themePalette.White,
-    },
-    black: {
-      main: themePalette.Black,
-    },
-    darkBackground: {
+    darkBg: {
       main: themePalette.LightGray,
     },
-    lightBackground: {
+    lightBg: {
       main: themePalette.White,
+    },
+    elementBg: {
+      main: themePalette.CoolGray,
+    },
+    elementHover: {
+      main: themePalette.CoolDarkGray,
     },
   },
 });

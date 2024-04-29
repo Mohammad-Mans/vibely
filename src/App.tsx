@@ -1,4 +1,3 @@
-import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import {
   LoginPage,
@@ -9,6 +8,7 @@ import {
   GroupsPage,
   GamingPage,
 } from "./pages";
+import HomeLayout from "./components/layout/HomeLayout";
 
 function App() {
   return (
@@ -19,11 +19,13 @@ function App() {
         </Route>
 
         <Route>
-          <Route index element={<HomePage />} />
-          <Route path="watch" element={<WatchPage />} />
-          <Route path="marketplace" element={<MarketplacePage />} />
-          <Route path="groups" element={<GroupsPage />} />
-          <Route path="gaming" element={<GamingPage />} />
+          <Route path="/" element={<HomeLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path="watch" element={<WatchPage />} />
+            <Route path="marketplace" element={<MarketplacePage />} />
+            <Route path="groups" element={<GroupsPage />} />
+            <Route path="gaming" element={<GamingPage />} />
+          </Route>
         </Route>
 
         <Route path="*" element={<MissingPage />} />
