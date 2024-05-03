@@ -5,26 +5,16 @@ import { AppBarPropsColorOverrides } from "@mui/material/AppBar";
 
 declare module "@mui/material/styles" {
   interface Palette {
-    darkBg: Palette["primary"];
-    lightBg: Palette["primary"];
     elementBg: Palette["primary"];
     elementHover: Palette["primary"];
+    iconBg: Palette["primary"];
+    iconHover: Palette["primary"];
   }
 
   interface PaletteOptions {
-    darkBg?: PaletteOptions["primary"];
-    lightBg?: PaletteOptions["primary"];
     elementBg?: PaletteOptions["primary"];
     elementHover?: PaletteOptions["primary"];
-  }
-
-  interface Text {
-    
-  }
-}
-
-declare module "@mui/material" {
-  interface AppBarPropsColorOverrides {
-    lightBg: true;
+    iconBg?: PaletteOptions["primary"];
+    iconHover?: PaletteOptions["primary"];
   }
 }

@@ -12,6 +12,7 @@ import {
   Avatar,
   Fade,
   alpha,
+  Popover,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import HomeIcon from "@mui/icons-material/HomeRounded";
@@ -26,11 +27,15 @@ import ChatIcon from "@mui/icons-material/Chat";
 import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
 import Logo from "../../../assets/Logo/Vibely-Logo-Filled.png";
 import { Outlet, useNavigate } from "react-router-dom";
+import { useThemeContext } from "../../../config/theme.config";
+import Button from "@mui/material/Button";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: "32px",
-  backgroundColor: theme.palette.darkBg.main,
+  backgroundColor: theme.palette.elementBg.main,
   marginLeft: 0,
   width: "100%",
   [theme.breakpoints.up("sm")]: {
@@ -40,7 +45,7 @@ const Search = styled("div")(({ theme }) => ({
 }));
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
-  color: alpha(theme.palette.common.black, 0.6),
+  color: alpha(theme.palette.text.primary, 0.6),
   padding: theme.spacing(0, 1),
   height: "100%",
   position: "absolute",
@@ -58,7 +63,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     width: "100%",
   },
   "& input::placeholder": {
-    color: alpha(theme.palette.common.black, 0.6),
+    color: alpha(theme.palette.text.primary, 0.6),
     opacity: 1,
   },
 }));
@@ -68,17 +73,17 @@ const StyledTab = styled(Tab)(({ theme }) => ({
   padding: "8px 14px",
   borderRadius: "16px",
   "&:hover": {
-    backgroundColor: theme.palette.darkBg.main,
+    backgroundColor: theme.palette.elementHover.main,
     transition: "background-color 0.3s",
   },
 }));
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   marginRight: 8,
-  color: "inherit",
-  backgroundColor: theme.palette.elementBg.main,
+
+  backgroundColor: theme.palette.iconBg.main,
   "&:hover": {
-    backgroundColor: theme.palette.elementHover.main,
+    backgroundColor: theme.palette.iconHover.main,
     transition: "background-color 0.3s",
   },
 }));
@@ -92,7 +97,8 @@ const IconTooltip = styled(({ className, ...props }: TooltipProps) => (
   />
 ))(({ theme }) => ({
   [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: alpha(theme.palette.common.black, 0.7),
+    backgroundColor: alpha(theme.palette.text.primary, 0.7),
+    color: theme.palette.getContrastText(theme.palette.text.primary),
     fontSize: 13,
     padding: "8px 12px",
     borderRadius: "8px",
@@ -118,7 +124,8 @@ const TabTooltip = styled(({ className, ...props }: TooltipProps) => (
   />
 ))(({ theme }) => ({
   [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: alpha(theme.palette.common.black, 0.7),
+    backgroundColor: alpha(theme.palette.text.primary, 0.7),
+    color: theme.palette.getContrastText(theme.palette.text.primary),
     fontSize: 13,
     padding: "8px 12px",
     borderRadius: "8px",
@@ -137,14 +144,38 @@ const getCurrentTab = () => {
 const HomeLayout = () => {
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState(getCurrentTab);
+  const { toggleTheme, isDarkMode } = useThemeContext();
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setCurrentTab(newValue);
   };
 
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+  const handleIconClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClosePopover = () => {
+    setAnchorEl(null);
+  };
+  
+  const open = Boolean(anchorEl);
+  const id = open ? "account-popover" : undefined;
+
+
   return (
-    <Box minHeight="100vh" bgcolor="darkBg.main">
-      <AppBar component="header" position="fixed" color="lightBg" elevation={3}>
+    <Box minHeight="100vh" bgcolor="background.paper">
+      <AppBar
+        component="header"
+        position="fixed"
+        elevation={0}
+        sx={{
+          backgroundColor: "background.default",
+          borderBottom: "1px solid",
+          borderColor: isDarkMode ? "#343536" : "#dadcdf",
+        }}
+      >
         <Toolbar sx={{ alignItems: "center" }} disableGutters>
           <Box
             sx={{
@@ -268,6 +299,7 @@ const HomeLayout = () => {
                 edge="end"
                 color="inherit"
                 sx={{ padding: 0, mr: "16px" }}
+                onClick={handleIconClick}
               >
                 <Badge
                   overlap="circular"
@@ -277,9 +309,9 @@ const HomeLayout = () => {
                         width: 20,
                         height: 20,
                         border: "2.5px solid ",
-                        borderColor: "lightBg.main",
+                        borderColor: "background.default",
                         borderRadius: "50%",
-                        backgroundColor: "elementBg.main",
+                        backgroundColor: "iconBg.main",
                       }}
                     />
                   }
@@ -292,6 +324,37 @@ const HomeLayout = () => {
                 </Badge>
               </IconButton>
             </IconTooltip>
+
+            <Popover
+              id={id}
+              open={open}
+              anchorEl={anchorEl}
+              onClose={handleClosePopover}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              disableScrollLock={true}
+              style={{
+                transform: "translateY(6px)",
+              }}
+            >
+              <Box width={350} p={"16px"} bgcolor={".main"}>
+                <Button
+                  fullWidth
+                  startIcon={
+                    isDarkMode ? <Brightness7Icon /> : <Brightness4Icon />
+                  }
+                  onClick={toggleTheme}
+                >
+                  {isDarkMode ? "Light Mode" : "Dark Mode"}
+                </Button>
+              </Box>
+            </Popover>
           </Box>
         </Toolbar>
       </AppBar>
